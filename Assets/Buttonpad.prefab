@@ -56,7 +56,7 @@ GameObject:
   - component: {fileID: 114655116690600614}
   - component: {fileID: 114911604824860726}
   m_Layer: 0
-  m_Name: Template
+  m_Name: Buttonpad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -291,6 +291,6 @@ MonoBehaviour:
   m_Script: {fileID: -119419473, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ModuleType: template
-  ModuleDisplayName: Template
-  RequiresTimerVisibility: 0
+  ModuleType: buttonpad
+  ModuleDisplayName: Buttonpad
+  RequiresTimerVisibility: 1
