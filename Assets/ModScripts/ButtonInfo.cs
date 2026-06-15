@@ -17,4 +17,8 @@ public struct ButtonInfo : IEquatable<ButtonInfo>
     public override int GetHashCode() => (int)ButtonSymbol ^ (int)ButtonColor;
 
     public bool Equals(ButtonInfo other) => ButtonSymbol == other.ButtonSymbol && ButtonColor == other.ButtonColor;
+    
+    public static bool operator == (ButtonInfo a, ButtonInfo b) => a.Equals(b);
+
+    public static bool operator != (ButtonInfo a, ButtonInfo b) => !(a == b);
 }
