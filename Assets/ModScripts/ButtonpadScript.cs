@@ -13,60 +13,57 @@ public class ButtonpadScript : MonoBehaviour
 	public KMBombInfo Bomb;
 	public KMAudio Audio;
 	public KMBombModule Module;
-	public KMColorblindMode ColorblindMode;
+	public KMColorblindMode Colorblind;
 
 	public KMSelectable[] Buttons;
 
-	static int moduleIdCounter = 1;
-	int moduleId;
-	private bool moduleSolved;
+	public MeshRenderer[] ButtonMeshes, LEDMeshes;
+	public Sprite[] KeypadSprites;
 
-	private ButtonInfo[] assignedButtons;
+	private static int _moduleIdCounter = 1;
+	private int _moduleId;
+	private bool _moduleSolved;
 
-	private bool correctButtonPressed;
+	private ButtonInfo[] _assignedButtons;
 
-	void Awake()
-    {
+	private bool _correctButtonPressed;
+	private bool _cbActive;
 
-		moduleId = moduleIdCounter++;
+	private void Awake()
+	{
+		_cbActive = Colorblind.ColorblindModeActive;
+
+		_moduleId = _moduleIdCounter++;
+
+		foreach (var button in Buttons)
+		{
+			button.OnInteract += () => { ButtonPress(button); return false; };
+			button.OnInteractEnded += () => { ButtonRelease(button); };
+		}
 
     }
 
-	void ButtonPress(KMSelectable button)
+	private void ButtonPress(KMSelectable button)
 	{
 		button.AddInteractionPunch(0.4f);
 		Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.BigButtonPress, button.transform);
 
-		if (moduleSolved)
+		if (_moduleSolved)
 			return;
 
 		var ix = (ButtonPosition)Array.IndexOf(Buttons, button);
-
-		correctButtonPressed = ButtonpadTools.DetermineCorrectButton(Bomb, assignedButtons).Contains(ix);
 	}
 
-	void ButtonRelease(KMSelectable button)
+	private void ButtonRelease(KMSelectable button)
 	{
 		Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.BigButtonRelease, button.transform);
 
-		if (moduleSolved)
+		if (_moduleSolved)
 			return;
-
-		if (correctButtonPressed) // This will eventually change to determine if the button's position is correct and if the bomb's timer has the digital root of the sum.
-		{
-			Log($"[Buttonpad #{moduleId}] {(ButtonPosition)Array.IndexOf(Buttons, button)} has been released at {Bomb.GetFormattedTime()}, and the timer contains the digital root of the sum. Solved!");
-			moduleSolved = true;
-			Module.HandlePass();
-		}
-		else
-		{
-			Log($"[Buttonpad # {moduleId}] {(ButtonPosition)Array.IndexOf(Buttons, button)} has been released at {Bomb.GetFormattedTime()}, but the timer doesn't contain the digital root of the sum. Strike!");
-			Module.HandleStrike();
-		}
 	}
 
 	
-	void Start()
+	private void Start()
     {
 
     }
@@ -78,13 +75,13 @@ public class ButtonpadScript : MonoBehaviour
 	private readonly string TwitchHelpMessage = @"!{0} something";
 #pragma warning restore 414
 
-	IEnumerator ProcessTwitchCommand(string command)
+	private IEnumerator ProcessTwitchCommand(string command)
     {
-		string[] split = command.ToUpperInvariant().Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+		var split = command.ToUpperInvariant().Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 		yield return null;
     }
 
-	IEnumerator TwitchHandleForcedSolve()
+	private IEnumerator TwitchHandleForcedSolve()
     {
 		yield return null;
     }
