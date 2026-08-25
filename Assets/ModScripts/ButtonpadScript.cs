@@ -18,13 +18,14 @@ public class ButtonpadScript : MonoBehaviour
 	public KMSelectable[] Buttons;
 
 	public MeshRenderer[] ButtonMeshes, LEDMeshes;
+	public SpriteRenderer[] SymbolDisplays;
 	public Sprite[] KeypadSprites;
+
+	public TextMesh[] CBButtonTexts, LEDButtonTexts;
 
 	private static int _moduleIdCounter = 1;
 	private int _moduleId;
 	private bool _moduleSolved;
-
-	private ButtonInfo[] _assignedButtons;
 
 	private bool _correctButtonPressed;
 	private bool _cbActive;
@@ -60,13 +61,14 @@ public class ButtonpadScript : MonoBehaviour
 
 		if (_moduleSolved)
 			return;
+		
+		
 	}
-
 	
 	private void Start()
-    {
-
-    }
+	{
+		
+	}
 
 	// Twitch Plays
 

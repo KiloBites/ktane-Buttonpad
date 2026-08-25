@@ -1,4 +1,4 @@
-public enum ButtonColor
+public enum LEDColor
 {
     Red,
     Orange,
@@ -9,7 +9,7 @@ public enum ButtonColor
     White
 }
 
-public enum LEDColor
+public enum ButtonColor
 {
     Red,
     Yellow,

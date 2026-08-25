@@ -292,6 +292,8 @@ GameObject:
   - component: {fileID: 114339362089785142}
   - component: {fileID: 114655116690600614}
   - component: {fileID: 114911604824860726}
+  - component: {fileID: 114826842276559854}
+  - component: {fileID: 114095932151378586}
   m_Layer: 0
   m_Name: Buttonpad
   m_TagString: Untagged
@@ -755,13 +757,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1611662569186338}
-  m_LocalRotation: {x: -0, y: 0.7071068, z: 0.7071068, w: 0}
-  m_LocalPosition: {x: 0, y: 0.02437, z: -0.0021}
-  m_LocalScale: {x: -0.08, y: -0.08, z: -0.08}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0.7071068, w: 0}
+  m_LocalPosition: {x: 0, y: 0.02437, z: -0.003}
+  m_LocalScale: {x: -0.075, y: -0.075, z: -0.075}
   m_Children: []
   m_Father: {fileID: 4614497951078980}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 180}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 180}
 --- !u!4 &4272712009406036
 Transform:
   m_ObjectHideFlags: 1
@@ -781,13 +783,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1984753532522952}
-  m_LocalRotation: {x: -0, y: 0.7071068, z: 0.7071068, w: 0}
-  m_LocalPosition: {x: 0, y: 0.02437, z: -0.0020999988}
-  m_LocalScale: {x: -0.08, y: -0.08, z: -0.08}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0.7071068, w: 0}
+  m_LocalPosition: {x: 0, y: 0.02437, z: -0.003}
+  m_LocalScale: {x: -0.075, y: -0.075, z: -0.075}
   m_Children: []
   m_Father: {fileID: 4625207516929636}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 180}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 180}
 --- !u!4 &4354250947445672
 Transform:
   m_ObjectHideFlags: 1
@@ -959,13 +961,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1430503232620928}
-  m_LocalRotation: {x: -0, y: 0.7071068, z: 0.7071068, w: 0}
-  m_LocalPosition: {x: 0, y: 0.02437, z: -0.0020999988}
-  m_LocalScale: {x: -0.08, y: -0.08, z: -0.08}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0.7071068, w: 0}
+  m_LocalPosition: {x: 0, y: 0.02437, z: -0.003}
+  m_LocalScale: {x: -0.075, y: -0.075, z: -0.075}
   m_Children: []
   m_Father: {fileID: 4150181635014070}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 180}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 180}
 --- !u!4 &4812600971588702
 Transform:
   m_ObjectHideFlags: 1
@@ -1037,13 +1039,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1819908537493490}
-  m_LocalRotation: {x: -0, y: 0.7071068, z: 0.7071068, w: 0}
-  m_LocalPosition: {x: 0, y: 0.02437, z: -0.0020999988}
-  m_LocalScale: {x: -0.08, y: -0.08, z: -0.08}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0.7071068, w: 0}
+  m_LocalPosition: {x: 0, y: 0.02437, z: -0.003}
+  m_LocalScale: {x: -0.075, y: -0.075, z: -0.075}
   m_Children: []
   m_Father: {fileID: 4725144461982882}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 180}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 180}
 --- !u!4 &4991186657952788
 Transform:
   m_ObjectHideFlags: 1
@@ -2072,6 +2074,87 @@ MonoBehaviour:
   AllowSelectionWrapY: 0
   ForceSelectionHighlight: 0
   ForceInteractionHighlight: 0
+--- !u!114 &114095932151378586
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1461983400456500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48ea4dc704418f54db442d3eaa668e92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Bomb: {fileID: 114655116690600614}
+  Audio: {fileID: 114911604824860726}
+  Module: {fileID: 114944640548819244}
+  Colorblind: {fileID: 114826842276559854}
+  Buttons:
+  - {fileID: 114077155992259962}
+  - {fileID: 114581552695612874}
+  - {fileID: 114492340559030114}
+  - {fileID: 114226204752819684}
+  ButtonMeshes:
+  - {fileID: 23244624836673294}
+  - {fileID: 23978274234113604}
+  - {fileID: 23917998410204858}
+  - {fileID: 23638779754359810}
+  LEDMeshes:
+  - {fileID: 23880309976557132}
+  - {fileID: 23488629231465688}
+  - {fileID: 23500206737660266}
+  - {fileID: 23668162597826482}
+  SymbolDisplays:
+  - {fileID: 212952914760635606}
+  - {fileID: 212131871565687548}
+  - {fileID: 212492771311106530}
+  - {fileID: 212479304130818390}
+  KeypadSprites:
+  - {fileID: 21300000, guid: 4eb3dc5306d9b482dbf6da16469c7135, type: 3}
+  - {fileID: 21300000, guid: 890318b137665494d9f0664997f8a3f9, type: 3}
+  - {fileID: 21300000, guid: 4b611555482ce425b9f69dc49f13294c, type: 3}
+  - {fileID: 21300000, guid: dac7432b2751c420099ba7d2dd1175bc, type: 3}
+  - {fileID: 21300000, guid: 7e80e34cb27d34cf184ca1ebc4ff4202, type: 3}
+  - {fileID: 21300000, guid: f3c288df00f994081bd6cc1426fdd017, type: 3}
+  - {fileID: 21300000, guid: 40f1c4286cd2e4e3290240f2fab2d471, type: 3}
+  - {fileID: 21300000, guid: dd1368262f84741b592ef5900bafde66, type: 3}
+  - {fileID: 21300000, guid: 424409299e3af4589a18a85a6ecd50e1, type: 3}
+  - {fileID: 21300000, guid: 54aee0ff7a7a4485d8d02424739880cb, type: 3}
+  - {fileID: 21300000, guid: 384f4ffc3c3a74767911748924e54e3d, type: 3}
+  - {fileID: 21300000, guid: 41a3357d7086546a39e6e1b2b88179c2, type: 3}
+  - {fileID: 21300000, guid: 4ac492a6649c24227b9398620862e8ea, type: 3}
+  - {fileID: 21300000, guid: 04bdd83e756c34b109a582e4ac0f9e57, type: 3}
+  - {fileID: 21300000, guid: 23e59e6e2139e447fbdec7db1ae0fce6, type: 3}
+  - {fileID: 21300000, guid: f9a8912fcd1e14b65a7bf566f6db70ba, type: 3}
+  - {fileID: 21300000, guid: 6d0697fabf524432b89aecd8ee202ddd, type: 3}
+  - {fileID: 21300000, guid: d8feced3bf0824da6a97d7c001776214, type: 3}
+  - {fileID: 21300000, guid: e771cbf105ff64060a17c614e6910ce4, type: 3}
+  - {fileID: 21300000, guid: 3ffa0cbc81a334ba8b6da525bd1bda9e, type: 3}
+  - {fileID: 21300000, guid: d193957a473b74ea1bd574b94a0a1e24, type: 3}
+  - {fileID: 21300000, guid: e01dfecda272a463e83bbcdbaf3819d7, type: 3}
+  - {fileID: 21300000, guid: 58564afddfe3a4924b1906d871ab6910, type: 3}
+  - {fileID: 21300000, guid: 973b671ebc73a443bb9c61bf05937eac, type: 3}
+  - {fileID: 21300000, guid: caa60a7c9324c4a3caa19613c4d426da, type: 3}
+  - {fileID: 21300000, guid: 5ab6224b3f8284f00bd6c0f020effa40, type: 3}
+  - {fileID: 21300000, guid: 86b3a4f4320e64d0cb81fffa40dacdbc, type: 3}
+  - {fileID: 21300000, guid: 4fd7e17f41668477e928030be52314bc, type: 3}
+  - {fileID: 21300000, guid: 9e45b8a6174bb472bb28fcfc54c9cfb0, type: 3}
+  - {fileID: 21300000, guid: 18b189e2ae6c74eb4bf0bff6bc51f9c0, type: 3}
+  - {fileID: 21300000, guid: 73e94d6e4d88c4a58a7af720bebe9f86, type: 3}
+  - {fileID: 21300000, guid: 586a3f56f09074a678b2a5c6127952e9, type: 3}
+  - {fileID: 21300000, guid: 339bf35fe0d514295bec2985e11432d9, type: 3}
+  - {fileID: 21300000, guid: 416d80c52398f42358846ce0eadf380b, type: 3}
+  - {fileID: 21300000, guid: 0a026f2637b8640fdac520367bf38252, type: 3}
+  CBButtonTexts:
+  - {fileID: 102582183275506090}
+  - {fileID: 102653941587597542}
+  - {fileID: 102544200636834706}
+  - {fileID: 102842895570906074}
+  LEDButtonTexts:
+  - {fileID: 102849592272424078}
+  - {fileID: 102650320471382868}
+  - {fileID: 102979788174338650}
+  - {fileID: 102293477725878104}
 --- !u!114 &114226204752819684
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2225,6 +2308,18 @@ MonoBehaviour:
   m_Script: {fileID: 2144496390, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114826842276559854
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1461983400456500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1cfb889a07d5fd4e9baed7960bb397f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _colorblindMode: 1
 --- !u!114 &114911604824860726
 MonoBehaviour:
   m_ObjectHideFlags: 1
