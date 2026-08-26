@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class ButtonInfo : IEquatable<ButtonInfo>
+public struct ButtonInfo : IEquatable<ButtonInfo>
 {
     public Symbol ButtonSymbol { get; private set; }
     public ButtonColor ButtonColor { get; private set; }
@@ -19,14 +19,9 @@ public class ButtonInfo : IEquatable<ButtonInfo>
         new Color32(0, 85, 255, 255),
         Color.white
     };
-    
-    
 
-    public override bool Equals(object obj)
-    {
-        var info = obj as ButtonInfo;
-        return info != null && Equals(info);
-    }
+
+    public override bool Equals(object obj) => obj is ButtonInfo && Equals((ButtonInfo)obj);
 
     public override int GetHashCode() => (int)ButtonSymbol ^ (int)ButtonColor;
 
@@ -38,5 +33,5 @@ public class ButtonInfo : IEquatable<ButtonInfo>
 
     public static bool operator !=(ButtonInfo a, ButtonInfo b) => !a.Equals(b);
 
-    public Color GetButtonColor() => _buttonColors[(int)ButtonSymbol];
+    public Color GetButtonColor() => _buttonColors[(int)ButtonColor];
 }

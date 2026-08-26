@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public static class ButtonpadExtensions
 {
@@ -21,5 +22,12 @@ public static class ButtonpadExtensions
         }
         
         return finalList;
+    }
+
+    public static T[] GetColumn<T>(this IEnumerable<T> source, int startIndex)
+    {
+        var list = source.ToList();
+
+        return Enumerable.Range(0, 35).Select(x => list[x * 8 + startIndex]).ToArray();
     }
 }

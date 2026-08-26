@@ -30,6 +30,10 @@ public class ButtonpadScript : MonoBehaviour
 	private bool _correctButtonPressed;
 	private bool _cbActive;
 
+	private ButtonpadGenerator _generator;
+	private ButtonInfo[] _buttonInfos;
+	private LEDInfo[] _ledInfos;
+
 	private void Awake()
 	{
 		_cbActive = Colorblind.ColorblindModeActive;
@@ -67,7 +71,21 @@ public class ButtonpadScript : MonoBehaviour
 	
 	private void Start()
 	{
-		
+		_generator = new ButtonpadGenerator(Bomb);
+		_ledInfos = _generator.GetLEDS();
+		_buttonInfos = _ledInfos.Select(x => x.Button).ToArray();
+		SetupButtons();
+	}
+
+	private void SetupButtons()
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			SymbolDisplays[i].sprite = KeypadSprites[(int)_buttonInfos[i].ButtonSymbol];
+			ButtonMeshes[i].material.color = _buttonInfos[i].GetButtonColor();
+			CBButtonTexts[i].text = _cbActive && _buttonInfos[i].ButtonColor != ButtonColor.White ? _buttonInfos[i].ButtonColor.ToString() : string.Empty;
+			CBButtonTexts[i].color = _buttonInfos[i].ButtonColor == ButtonColor.Yellow ? Color.black : Color.white;
+		}
 	}
 
 	// Twitch Plays

@@ -1,15 +1,19 @@
 using UnityEngine;
 
-public class LEDInfo
+public struct LEDInfo
 {
     public ButtonPosition Position { get; private set; }
+    public ButtonInfo Button { get; private set; }
     public LEDColor LEDColor { get; private set; }
 
-    public LEDInfo(ButtonPosition position, LEDColor ledColor)
+    public LEDInfo(ButtonPosition position, ButtonInfo button, LEDColor ledColor)
     {
         Position = position;
+        Button = button;
         LEDColor = ledColor;
     }
+
+    public override string ToString() => $"The LED is {LEDColor} on the {Position} button";
 
     private static readonly Color32[] _ledColors =
     {
