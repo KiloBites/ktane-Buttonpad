@@ -21,7 +21,7 @@ public class ButtonpadScript : MonoBehaviour
 	public SpriteRenderer[] SymbolDisplays;
 	public Sprite[] KeypadSprites;
 
-	public TextMesh[] CBButtonTexts, LEDButtonTexts;
+	public TextMesh[] CBButtonTexts, CBLEDTexts;
 
 	private static int _moduleIdCounter = 1;
 	private int _moduleId;
@@ -116,6 +116,9 @@ public class ButtonpadScript : MonoBehaviour
 
 		LEDMeshes[(int)_ledSet[(int)pos].Position].material = LEDMats[1];
 
+		CBLEDTexts[(int)_ledSet[(int)pos].Position].text = _cbActive && _ledSet[(int)pos].LEDColor != LEDColor.White ? _ledSet[(int)pos].LEDColor.ToString() : string.Empty;
+		CBLEDTexts[(int)_ledSet[(int)pos].Position].color = new[] { ButtonColor.Yellow, ButtonColor.White }.Contains(_buttonSet[(int)_ledSet[(int)pos].Position].ButtonColor) ? Color.black : Color.white;
+
 		var color = _ledSet[(int)pos].GetLEDColor();
 		var darkerColor = color.GetDarkerShade();
 
@@ -168,6 +171,8 @@ public class ButtonpadScript : MonoBehaviour
 			_holding = null;
 
 			LEDMeshes[(int)ix].material = LEDMats[0];
+			CBLEDTexts[(int)_ledSet[(int)ix].Position].text = string.Empty;
+			
 			_lastButtonLit = _buttonSet[(int)_ledSet[(int)ix].Position];
 		}
 		else if (_inSubmission)
@@ -211,6 +216,12 @@ public class ButtonpadScript : MonoBehaviour
 		}
 		else
 		{
+			StopCoroutine(_holding);
+			_holding = null;
+			
+			LEDMeshes[(int)_ledSet[(int)ix].Position].material = LEDMats[0];
+			CBLEDTexts[(int)_ledSet[(int)ix].Position].text = string.Empty;
+			
 			if (_lastButtonLit == null && !_generator.GetFirstButtonToHold().Contains(_buttonSet[(int)ix]))
 				areWrong.Add($"expected to hold either {_generator.GetFirstButtonToHold().Select((x, i) => i == _generator.GetFirstButtonToHold().Count() - 1 ? $"or {_generator.GetExpectedPositionFromButton(x)}" : _generator.GetExpectedPositionFromButton(x).ToString()).Join(", ")}");
 			else if (_buttonSet[(int)ix] != _lastButtonLit)

@@ -120,11 +120,6 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 114095932151378586, guid: d17dbae31d265bb48be96785547d7c84,
-        type: 2}
-      propertyPath: LEDMats.Array.size
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 4182846922419878, guid: d17dbae31d265bb48be96785547d7c84, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -157,20 +152,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 4150181635014070, guid: d17dbae31d265bb48be96785547d7c84, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114095932151378586, guid: d17dbae31d265bb48be96785547d7c84,
-        type: 2}
-      propertyPath: LEDMats.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 66207c9b4820a4cb895068185eb74c26, type: 2}
-    - target: {fileID: 114095932151378586, guid: d17dbae31d265bb48be96785547d7c84,
-        type: 2}
-      propertyPath: LEDMats.Array.data[1]
-      value: 
-      objectReference: {fileID: 2100000, guid: 4263496aabfd44869bcee28e6403e4d9, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d17dbae31d265bb48be96785547d7c84, type: 2}
   m_IsPrefabParent: 0

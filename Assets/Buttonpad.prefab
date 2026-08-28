@@ -659,7 +659,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1450545610780710}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.04, y: -0, z: 0.02}
+  m_LocalPosition: {x: -0.04, y: 0, z: 0.02}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4120908409816596}
@@ -758,8 +758,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1611662569186338}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0.7071068, w: 0}
-  m_LocalPosition: {x: 0, y: 0.02437, z: -0.003}
-  m_LocalScale: {x: -0.075, y: -0.075, z: -0.075}
+  m_LocalPosition: {x: 0, y: 0.02437, z: -0}
+  m_LocalScale: {x: -0.05, y: -0.05, z: -0.05}
   m_Children: []
   m_Father: {fileID: 4614497951078980}
   m_RootOrder: 1
@@ -784,8 +784,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1984753532522952}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0.7071068, w: 0}
-  m_LocalPosition: {x: 0, y: 0.02437, z: -0.003}
-  m_LocalScale: {x: -0.075, y: -0.075, z: -0.075}
+  m_LocalPosition: {x: 0, y: 0.02437, z: -0}
+  m_LocalScale: {x: -0.05, y: -0.05, z: -0.05}
   m_Children: []
   m_Father: {fileID: 4625207516929636}
   m_RootOrder: 1
@@ -962,8 +962,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1430503232620928}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0.7071068, w: 0}
-  m_LocalPosition: {x: 0, y: 0.02437, z: -0.003}
-  m_LocalScale: {x: -0.075, y: -0.075, z: -0.075}
+  m_LocalPosition: {x: 0, y: 0.02437, z: -0}
+  m_LocalScale: {x: -0.05, y: -0.05, z: -0.05}
   m_Children: []
   m_Father: {fileID: 4150181635014070}
   m_RootOrder: 1
@@ -1040,8 +1040,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1819908537493490}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0.7071068, w: 0}
-  m_LocalPosition: {x: 0, y: 0.02437, z: -0.003}
-  m_LocalScale: {x: -0.075, y: -0.075, z: -0.075}
+  m_LocalPosition: {x: 0, y: 0.02437, z: -0}
+  m_LocalScale: {x: -0.05, y: -0.05, z: -0.05}
   m_Children: []
   m_Father: {fileID: 4725144461982882}
   m_RootOrder: 1
@@ -2094,6 +2094,9 @@ MonoBehaviour:
   - {fileID: 114581552695612874}
   - {fileID: 114492340559030114}
   - {fileID: 114226204752819684}
+  LEDMats:
+  - {fileID: 2100000, guid: 66207c9b4820a4cb895068185eb74c26, type: 2}
+  - {fileID: 2100000, guid: 4263496aabfd44869bcee28e6403e4d9, type: 2}
   ButtonMeshes:
   - {fileID: 23244624836673294}
   - {fileID: 23978274234113604}
@@ -2150,7 +2153,7 @@ MonoBehaviour:
   - {fileID: 102653941587597542}
   - {fileID: 102544200636834706}
   - {fileID: 102842895570906074}
-  LEDButtonTexts:
+  CBLEDTexts:
   - {fileID: 102849592272424078}
   - {fileID: 102650320471382868}
   - {fileID: 102979788174338650}
