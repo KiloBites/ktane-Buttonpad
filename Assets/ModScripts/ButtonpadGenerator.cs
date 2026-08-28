@@ -156,15 +156,26 @@ public class ButtonpadGenerator
         _buttonsSorted = selectedIndices.Select(x => new ButtonInfo(symbolColumn[x], (ButtonColor)Range(0, 4))).ToArray();
         _buttons = _buttonsSorted.ToArray().Shuffle();
         
-        var buttonPositions = ((ButtonPosition[])Enum.GetValues(typeof(ButtonPosition))).Shuffle();
+        var buttonPositions = (ButtonPosition[])Enum.GetValues(typeof(ButtonPosition));
 
-        _leds = selectedIndices.Select((x, i) => new LEDInfo(buttonPositions[i], _buttons[i], colorColumn[x])).ToArray();
+        var shuffledButtonPositions = buttonPositions.ToArray().Shuffle();
+
+        while (Enumerable.Range(0, 4).Any(x => buttonPositions[x] == shuffledButtonPositions[x]))
+            shuffledButtonPositions = buttonPositions.ToArray().Shuffle();
+
+        _leds = selectedIndices.Select((x, i) => new LEDInfo(shuffledButtonPositions[i], _buttons[i], colorColumn[x])).ToArray();
         _rowDigitsForSubmission = selectedIndices.Select(x => _rowNumbers[x]).ToArray();
     }
     
-    public bool CheckButtons(IEnumerable<ButtonInfo> buttonsToCheck, int buttonsPressedSoFar) => _buttonsSorted.Take(buttonsPressedSoFar).SequenceEqual(buttonsToCheck);
+    public ButtonPosition GetExpectedPosition(int index) => (ButtonPosition)Array.IndexOf(_buttons, _buttonsSorted[index]);
+    
+    public ButtonPosition GetExpectedPositionFromButton(ButtonInfo button) => (ButtonPosition)Array.IndexOf(_buttons, button);
 
-    public int CalculateDigitalRoot(LEDInfo led)
+    public int GetDigitForSubmission(ButtonInfo button) => _rowDigitsForSubmission[Array.IndexOf(_buttonsSorted, button)];
+    
+    public bool CheckButtons(IEnumerable<ButtonInfo> buttonsToCheck, int pressedSoFar) => (pressedSoFar == 4 ? _buttonsSorted : _buttonsSorted.Take(pressedSoFar)).SequenceEqual(buttonsToCheck);
+
+    public static int CalculateDigitalRoot(LEDInfo led)
     {
         var buttonColorIndices = _buttonColorByColumn.IndicesOf(x => led.Button.ButtonColor == x).ToArray();
         

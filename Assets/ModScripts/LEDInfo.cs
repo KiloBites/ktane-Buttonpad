@@ -13,7 +13,7 @@ public struct LEDInfo
         LEDColor = ledColor;
     }
 
-    public override string ToString() => $"The LED is {LEDColor} on the {Position} button";
+    public override string ToString() => $"the LED is {LEDColor} on the {Position} button";
 
     private static readonly Color32[] _ledColors =
     {

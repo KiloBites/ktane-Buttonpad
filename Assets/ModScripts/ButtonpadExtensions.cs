@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 public static class ButtonpadExtensions
 {
@@ -30,4 +31,6 @@ public static class ButtonpadExtensions
 
         return Enumerable.Range(0, 35).Select(x => list[x * 8 + startIndex]).ToArray();
     }
+    
+    public static Color GetDarkerShade(this Color color) => new Color(color.r > 0 ? color.r - 0.2f : color.r, color.g > 0 ? color.g - 0.2f : color.g, color.b > 0 ? color.b - 0.2f : color.b);
 }
