@@ -150,7 +150,9 @@ public class ButtonpadScript : MonoBehaviour
 			_holding = null;
 			StopCoroutine(_startingHold);
 			_startingHold = null;
-			_inSubmission = true;
+
+			if (!_inSubmission)
+				_inSubmission = true;
 		}
 
 		if (_buttonAnims[(int)ix] != null && !_inSubmission)
@@ -162,11 +164,13 @@ public class ButtonpadScript : MonoBehaviour
 		if (_moduleSolved || (_inSubmission && _submittedButtons.Contains(_buttonSet[(int)ix])))
 			return;
 
-		var timer = Bomb.GetFormattedTime().Where(x => x != ':' || x != '.').Select(x => x - '0').ToArray();
+		var timer = Bomb.GetFormattedTime().Where(char.IsDigit).Select(x => x - '0').ToArray();
 		var areWrong = new List<string>();
 
 		if (!_inSubmission && (_lastButtonLit == null ? _generator.GetFirstButtonToHold().Contains(_buttonSet[(int)ix]) : _buttonSet[(int)ix] == _lastButtonLit) && timer.Contains(ButtonpadGenerator.CalculateDigitalRoot(_ledSet[(int)ix])))
 		{
+			Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.BigButtonRelease, button.transform);
+			
 			StopCoroutine(_holding);
 			_holding = null;
 
