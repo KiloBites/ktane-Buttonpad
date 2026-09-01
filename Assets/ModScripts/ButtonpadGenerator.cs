@@ -73,7 +73,7 @@ public class ButtonpadGenerator
         "PPPGGWBO",
         "YBRWWGWR",
         "RPGOGWBO",
-        "BYBOYOGW",
+        "YBYOYOGW",
         "WWOWBYOR",
         "RBGRORPY",
         "GRYBPWRB",
@@ -137,6 +137,16 @@ public class ButtonpadGenerator
         0
     };
 
+    private static readonly ButtonPosition[][] _possibleMappings =
+    {
+        new[] { TR, BL, BR, TL },
+        new[] { TR, BR, TL, BL },
+        new[] { BL, BR, TR, TL },
+        new[] { BL, TL, BR, TR },
+        new[] { BR, BL, TL, TR },
+        new[] { BR, TL, TR, BL }
+    };
+
     public ButtonpadGenerator(KMBombInfo bomb)
     {
         _bomb = bomb;
@@ -156,17 +166,14 @@ public class ButtonpadGenerator
 
         _buttonsSorted = selectedIndices.Select(x => new ButtonInfo(symbolColumn[x], (ButtonColor)Range(0, 4))).ToArray();
         _buttons = _buttonsSorted.ToArray().Shuffle();
-        
-        var buttonPositions = (ButtonPosition[])Enum.GetValues(typeof(ButtonPosition));
 
-        var shuffledButtonPositions = buttonPositions.ToArray().Shuffle();
+        var selectedButtonPositions = _possibleMappings.PickRandom();
 
-        while (Enumerable.Range(0, 4).Any(x => buttonPositions[x] == shuffledButtonPositions[x]))
-            shuffledButtonPositions = buttonPositions.ToArray().Shuffle();
-
-        _leds = selectedIndices.Select((x, i) => new LEDInfo(shuffledButtonPositions[i], _buttons[i], colorColumn[x])).ToArray();
+        _leds = selectedIndices.Select((x, i) => new LEDInfo(selectedButtonPositions[i], _buttons[i], colorColumn[x])).ToArray();
         _rowDigitsForSubmission = selectedIndices.Select(x => _rowNumbers[x]).ToArray();
     }
+    
+    
 
     public string GetColoredSymbols()
     {
