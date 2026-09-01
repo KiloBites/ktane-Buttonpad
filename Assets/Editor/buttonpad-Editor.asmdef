@@ -1,0 +1,10 @@
+{
+  "name": "buttonpad-Editor",
+  "references": [
+    "buttonpad"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": []
+}

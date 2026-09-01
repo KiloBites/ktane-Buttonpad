@@ -14,6 +14,7 @@ public class ButtonpadGenerator
     private ButtonInfo[] _buttons, _buttonsSorted;
     private LEDInfo[] _leds;
     private int[] _rowDigitsForSubmission;
+    private int _columnIndex;
 
     private static readonly ButtonColor[] _buttonColorByColumn = { Yellow, Blue, Red, White, Blue, White, Yellow, Red };
 
@@ -148,10 +149,10 @@ public class ButtonpadGenerator
     {
         var selectedIndices = Enumerable.Range(0, 35).ToList().Shuffle().Take(4).OrderBy(x => x).ToArray();
 
-        var selectedColumn = Range(0, 8);
+        _columnIndex = Range(0, 8);
         
-        var symbolColumn = _symbolTable.GetColumn(selectedColumn);
-        var colorColumn = _ledColorTable.GetColumn(selectedColumn);
+        var symbolColumn = _symbolTable.GetColumn(_columnIndex);
+        var colorColumn = _ledColorTable.GetColumn(_columnIndex);
 
         _buttonsSorted = selectedIndices.Select(x => new ButtonInfo(symbolColumn[x], (ButtonColor)Range(0, 4))).ToArray();
         _buttons = _buttonsSorted.ToArray().Shuffle();
@@ -165,6 +166,18 @@ public class ButtonpadGenerator
 
         _leds = selectedIndices.Select((x, i) => new LEDInfo(shuffledButtonPositions[i], _buttons[i], colorColumn[x])).ToArray();
         _rowDigitsForSubmission = selectedIndices.Select(x => _rowNumbers[x]).ToArray();
+    }
+
+    public string GetColoredSymbols()
+    {
+        var symbolColumn = _symbolTable.GetColumn(_columnIndex);
+        var colorColumn = _ledColorTable.GetColumn(_columnIndex);
+
+        var buttonSymbols = _buttonsSorted.Select(x => x.ButtonSymbol).ToArray();
+
+        var buttonOrderIndices = symbolColumn.IndicesOf(buttonSymbols.Contains).ToArray();
+
+        return $"Column {_columnIndex + 1} has been selected with the following order: {buttonOrderIndices.Select(x => $"{colorColumn[x]} {symbolColumn[x]}").Join(", ")}";
     }
     
     public ButtonPosition GetExpectedPosition(int index) => (ButtonPosition)Array.IndexOf(_buttons, _buttonsSorted[index]);
@@ -186,20 +199,63 @@ public class ButtonpadGenerator
         return ButtonpadTools.DigitalRoot(symbolIndices[0], symbolIndices[1]);
     }
 
-    public override string ToString() => $"Rule {Enumerable.Range(0, 10).First(CheckRule) + 1} applies.";
+    public override string ToString()
+    {
+        var appliedRule = Enumerable.Range(0, 10).First(CheckRule);
+
+        string rule;
+
+        var firstButtonPositions = GetFirstButtonToHold().Select(x => (ButtonPosition)Array.IndexOf(_buttons, x)).ToArray();
+        
+        switch (appliedRule)
+        {
+            case 0:
+                rule = "There is a blue button with the right C symbol on it";
+                break;
+            case 1:
+                rule = "Exactly three buttons are the same color";
+                break;
+            case 2:
+                rule = "There are two or more batteries on the bomb, and one of the buttons has a crucible symbol on it";
+                break;
+            case 3:
+                rule = "There is a serial port and a BOB indicator present on the bomb";
+                break;
+            case 4:
+                rule = "There is a button with the Six or Copyright symbol on it";
+                break;
+            case 5:
+                rule = "None of the buttons contained the Question Mark symbol, and an unlit NSA indicator is present on the bomb";
+                break;
+            case 6:
+                rule = "Exactly one button has either the Weird Bike, Hook N, or Clover symbol on it";
+                break;
+            case 7:
+                rule = "All but one button has either the Squidknife, Pumpkin, Smiley Face, or the Euro symbol on it";
+                break;
+            case 8:
+                rule = "None of the symbols in the above rules appeared on any of the buttons";
+                break;
+            default:
+                rule = "None of the rules apply";
+                break;
+        }
+
+        return $"Rule {appliedRule + 1} applies: {rule}. The first correct button(s) to hold are: {firstButtonPositions.Join(", ")}";
+    }
 
     public IEnumerable<ButtonInfo> GetFirstButtonToHold()
     {
-        var firstRuleIndex = Enumerable.Range(0, 10).First(CheckRule);
+        var appliedRule = Enumerable.Range(0, 10).First(CheckRule);
         
         var rule5Symbols = new[] { Six, Copyright };
         var rule7Symbols = new[] { WeirdBike, HookN, Clover };
         var rule8Symbols = new[] { SquidKnife, Pumpkin, SmileyFace, Euro };
 
-        switch (firstRuleIndex)
+        switch (appliedRule)
         {
             case 0:
-                return _buttons.Where(x => x.ButtonColor == Blue);
+                return _buttons.Where(x => x.ButtonColor == Blue && x.ButtonSymbol == RightC);
             case 1:
                 return _buttons.GroupBy(x => x.ButtonColor).Where(x => x.Count() == 1).Select(x => x.First());
             case 2:

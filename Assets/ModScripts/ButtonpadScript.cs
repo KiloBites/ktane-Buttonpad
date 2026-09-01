@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static UnityEngine.Random;
 using static UnityEngine.Debug;
 
 public class ButtonpadScript : MonoBehaviour 
@@ -27,7 +26,7 @@ public class ButtonpadScript : MonoBehaviour
 	private int _moduleId;
 	private bool _moduleSolved;
 
-	private bool _inSubmission, _isHeld;
+	private bool _inSubmission;
 	private bool _cbActive;
 
 	private ButtonpadGenerator _generator;
@@ -39,6 +38,7 @@ public class ButtonpadScript : MonoBehaviour
 	
 	private readonly List<ButtonInfo> _submittedButtons = new List<ButtonInfo>();
 	private ButtonInfo? _lastButtonLit;
+	private readonly bool[] _isBeingHeld = new bool[4];
 	
 
 	private void Awake()
@@ -57,18 +57,21 @@ public class ButtonpadScript : MonoBehaviour
 
 	private void ButtonPress(KMSelectable button)
 	{
-		button.AddInteractionPunch(0.4f);
-		Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.BigButtonPress, button.transform);
-
 		var ix = (ButtonPosition)Array.IndexOf(Buttons, button);
 
-		if (_buttonAnims[(int)ix] != null)
+		if (!_submittedButtons.Contains(_buttonSet[(int)ix]))
+		{
+			button.AddInteractionPunch(0.4f);
+			Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.BigButtonPress, button.transform);
+		}
+
+		if (_buttonAnims[(int)ix] != null && !_inSubmission)
 		{
 			StopCoroutine(_buttonAnims[(int)ix]);
 			_buttonAnims[(int)ix] = null;
 		}
 		
-		if (_moduleSolved || (_inSubmission && _submittedButtons.Contains(_buttonSet[(int)ix])))
+		if (_moduleSolved || _inSubmission || _submittedButtons.Contains(_buttonSet[(int)ix]))
 			return;
 		
 		_buttonAnims[(int)ix] = StartCoroutine(ButtonAnimation(ix, true));
@@ -113,11 +116,15 @@ public class ButtonpadScript : MonoBehaviour
 		_startingHold = StartCoroutine(Hold());
 
 		yield return new WaitWhile(() => _startingHold != null);
+		
+		Log($"[Buttonpad #{_moduleId}] {pos} has been held and {_ledSet[(int)pos]}");
+		Log($"[Buttonpad #{_moduleId}] Release the button when the timer contains a {ButtonpadGenerator.CalculateDigitalRoot(_ledSet[(int)pos])}");
+		_isBeingHeld[(int)pos] = true;
 
 		LEDMeshes[(int)_ledSet[(int)pos].Position].material = LEDMats[1];
 
 		CBLEDTexts[(int)_ledSet[(int)pos].Position].text = _cbActive && _ledSet[(int)pos].LEDColor != LEDColor.White ? _ledSet[(int)pos].LEDColor.ToString() : string.Empty;
-		CBLEDTexts[(int)_ledSet[(int)pos].Position].color = new[] { ButtonColor.Yellow, ButtonColor.White }.Contains(_buttonSet[(int)_ledSet[(int)pos].Position].ButtonColor) ? Color.black : Color.white;
+		CBLEDTexts[(int)_ledSet[(int)pos].Position].color = _buttonSet[(int)pos].ButtonColor == ButtonColor.Yellow ? Color.black : Color.white;
 
 		var color = _ledSet[(int)pos].GetLEDColor();
 		var darkerColor = color.GetDarkerShade();
@@ -161,7 +168,7 @@ public class ButtonpadScript : MonoBehaviour
 			_buttonAnims[(int)ix] = null;
 		}
 
-		if (_moduleSolved || (_inSubmission && _submittedButtons.Contains(_buttonSet[(int)ix])))
+		if (_moduleSolved || _submittedButtons.Contains(_buttonSet[(int)ix]))
 			return;
 
 		var timer = Bomb.GetFormattedTime().Where(char.IsDigit).Select(x => x - '0').ToArray();
@@ -174,7 +181,9 @@ public class ButtonpadScript : MonoBehaviour
 			StopCoroutine(_holding);
 			_holding = null;
 
-			LEDMeshes[(int)ix].material = LEDMats[0];
+			_isBeingHeld[(int)ix] = false;
+
+			LEDMeshes[(int)_ledSet[(int)ix].Position].material = LEDMats[0];
 			CBLEDTexts[(int)_ledSet[(int)ix].Position].text = string.Empty;
 			
 			_lastButtonLit = _buttonSet[(int)_ledSet[(int)ix].Position];
@@ -190,6 +199,8 @@ public class ButtonpadScript : MonoBehaviour
 
 				if (_submittedButtons.Count != 4)
 					return;
+				
+				Log($"[Buttonpad #{_moduleId}] All four buttons have been pressed correctly. Solved!");
 				
 				_moduleSolved = true;
 				Module.HandlePass();
@@ -214,7 +225,8 @@ public class ButtonpadScript : MonoBehaviour
 				Log($"[Buttonpad #{_moduleId}] {ix} is pressed, but {areWrong.Join(", and ")}. Strike!");
 				
 				_submittedButtons.Clear();
-				
+				_inSubmission = false;
+				_lastButtonLit = null;
 				Module.HandleStrike();
 			}
 		}
@@ -222,6 +234,7 @@ public class ButtonpadScript : MonoBehaviour
 		{
 			StopCoroutine(_holding);
 			_holding = null;
+			_isBeingHeld[(int)ix] = false;
 			
 			LEDMeshes[(int)_ledSet[(int)ix].Position].material = LEDMats[0];
 			CBLEDTexts[(int)_ledSet[(int)ix].Position].text = string.Empty;
@@ -241,14 +254,23 @@ public class ButtonpadScript : MonoBehaviour
 
 	}
 	
-	
-	
 	private void Start()
 	{
 		_generator = new ButtonpadGenerator(Bomb);
 		_ledSet = _generator.GetLEDS();
 		_buttonSet = _ledSet.Select(x => x.Button).ToArray();
 		SetupButtons();
+		
+		Log($"[Buttonpad #{_moduleId}] The buttons in reading order: {_buttonSet.Select(x => $"[{x}]").Join(", ")}");
+		
+		Log($"[Buttonpad #{_moduleId}] {_generator}");
+		
+		Log($"[Buttonpad #{_moduleId}] {_generator.GetColoredSymbols()}");
+		
+		var correctPositions = Enumerable.Range(0, 4).Select(_generator.GetExpectedPosition).ToArray();
+		var buttonDigits = correctPositions.Select(x => _generator.GetDigitForSubmission(_buttonSet[(int)x])).ToArray();
+		
+		Log($"[Buttonpad #{_moduleId}] The correct buttons and times are: {Enumerable.Range(0, 4).Select(x => $"[{correctPositions[x]} when the timer contains a {buttonDigits[x]}]").Join(", ")}");
 	}
 
 	private void SetupButtons()
@@ -262,22 +284,207 @@ public class ButtonpadScript : MonoBehaviour
 		}
 	}
 
+	private void ToggleColorblind()
+	{
+		_cbActive ^= true;
+
+		for (int i = 0; i < 4; i++)
+		{
+			CBButtonTexts[i].text = _cbActive && _buttonSet[i].ButtonColor != ButtonColor.White ? _buttonSet[i].ButtonColor.ToString() : string.Empty;
+			CBButtonTexts[i].color = _buttonSet[i].ButtonColor == ButtonColor.Yellow ? Color.black : Color.white;
+		}
+
+		if (!_isBeingHeld.Any(x => x))
+			return;
+		
+		var heldButtonIndex = _isBeingHeld.IndexOf(x => x);
+			
+		CBLEDTexts[(int)_ledSet[heldButtonIndex].Position].text = _cbActive && _ledSet[heldButtonIndex].LEDColor != LEDColor.White ? _ledSet[heldButtonIndex].LEDColor.ToString() : string.Empty;
+	}
+
 	// Twitch Plays
 
 
 #pragma warning disable 414
-	private readonly string TwitchHelpMessage = @"!{0} something";
+	private readonly string TwitchHelpMessage = @"!{0} hold TL/TR/BL/BR [holds the button at that position] || release # [releases the button held when the timer contains that digit] || tap TL/TR/BL/BR # [presses the button when the timer contains that digit] || cb [toggles colorblind]";
 #pragma warning restore 414
 
 	private IEnumerator ProcessTwitchCommand(string command)
     {
 		var split = command.ToUpperInvariant().Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-		yield return null;
+		
+		var buttonPositions = ((ButtonPosition[])Enum.GetValues(typeof(ButtonPosition))).Select(x => x.ToString()).ToArray();
+
+		switch (split[0])
+		{
+			case "HOLD":
+				if (_inSubmission)
+				{
+					yield return "sendtochaterror The module is in submission mode!";
+					yield break;
+				}
+
+				if (split.Length == 1)
+				{
+					yield return "sendtochaterror Please specify what button to hold!";
+					yield break;
+				}
+				
+				if (split.Length > 2)
+				{
+					yield return "sendtochaterror Too many parameters!";
+					yield break;
+				}
+				
+				if (_isBeingHeld.Any(x => x))
+				{
+					yield return $"sendtochaterror You cannot hold any other buttons since {(ButtonPosition)Enumerable.Range(0, 4).First(x => _isBeingHeld[x])} is held!";
+					yield break;
+				}
+				
+				if (!buttonPositions.Contains(split[1]))
+				{
+					yield return $"sendtochaterror {split[1]} is not a valid button position!";
+					yield break;
+				}
+
+				yield return null;
+				
+				Buttons[Array.IndexOf(buttonPositions, split[1])].OnInteract();
+				
+				yield return new WaitForSeconds(0.5f);
+
+				yield break;
+			case "RELEASE":
+				if (_inSubmission)
+				{
+					yield return "sendtochaterror The module is in submission mode!";
+					yield break;
+				}
+
+				if (split.Length == 1)
+				{
+					yield return "sendtochaterror Please specify when to release the button held!";
+					yield break;
+				}
+
+				if (split.Length > 2)
+				{
+					yield return "sendtochaterror Too many parameters!";
+					yield break;
+				}
+
+				if (_isBeingHeld.All(x => !x))
+				{
+					yield return "sendtochaterror There is no button to release!";
+					yield break;
+				}
+
+				int releaseDigit;
+
+				if (split[1].Length > 1 || !int.TryParse(split[1], out releaseDigit))
+				{
+					yield return "sendtochaterror Either the digit is invalid or cannot be more than one digit!";
+					yield break;
+				}
+
+				yield return null;
+				
+				while (!Bomb.GetFormattedTime().Where(char.IsDigit).Select(x => x - '0').Contains(releaseDigit))
+					yield return "trycancel Button release command has been canceled!";
+
+				Buttons[_isBeingHeld.IndexOf(x => x)].OnInteractEnded();
+				yield return new WaitForSeconds(0.1f);
+				
+				yield break;
+			case "TAP":
+				if (split.Length == 1)
+				{
+					yield return "sendtochaterror Please specify what button to tap!";
+					yield break;
+				}
+
+				if (split.Length > 3)
+				{
+					yield return "sendtochaterror Too many parameters!";
+					yield break;
+				}
+
+				if (!buttonPositions.Contains(split[1]))
+				{
+					yield return $"sendtochaterror {split[1]} is not a valid button position!";
+					yield break;
+				}
+
+				int tapDigit;
+
+				if (split[2].Length > 1 || !int.TryParse(split[2], out tapDigit))
+				{
+					yield return "sendtochaterror Either the digit is invalid or cannot be more than one digit!";
+					yield break;
+				}
+				
+				yield return null;
+
+				var index = Array.IndexOf(buttonPositions, split[1]);
+				
+				while (!Bomb.GetFormattedTime().Where(char.IsDigit).Select(x => x - '0').Contains(tapDigit))
+					yield return "trycancel Button tap command has been canceled!";
+
+				Buttons[index].OnInteract();
+				yield return new WaitForSeconds(0.1f);
+				Buttons[index].OnInteractEnded();
+				yield return new WaitForSeconds(0.1f);
+				
+				yield break;
+			case "CB":
+				if (split.Length > 1)
+				{
+					yield return "sendtochaterror Too many parameters!";
+					yield break;
+				}
+
+				yield return null;
+				ToggleColorblind();
+				yield return new WaitForSeconds(0.1f);
+				yield break;
+			default:
+				yield return "sendtochaterror Invalid command!";
+				yield break;
+		}
     }
 
 	private IEnumerator TwitchHandleForcedSolve()
     {
-		yield return null;
+	    if (_isBeingHeld.Any(x => x))
+	    {
+		    var index = _isBeingHeld.IndexOf(x => x);
+
+		    while (!Bomb.GetFormattedTime().Where(char.IsDigit).Select(x => x - '0').Contains(ButtonpadGenerator.CalculateDigitalRoot(_ledSet[index])))
+			    yield return true;
+
+		    Buttons[index].OnInteractEnded();
+		    yield return new WaitForSeconds(0.1f);
+	    }
+
+	    var correctButtonPositions = Enumerable.Range(0, 4).Select(_generator.GetExpectedPosition).ToArray();
+	    var correctDigits = correctButtonPositions.Select(x => _generator.GetDigitForSubmission(_buttonSet[(int)x])).ToArray();
+
+	    yield return null;
+
+	    for (int i = 0; i < 4; i++)
+	    {
+		    if (_submittedButtons.Contains(_buttonSet[(int)correctButtonPositions[i]]))
+			    continue;
+
+		    while (!Bomb.GetFormattedTime().Where(char.IsDigit).Select(x => x - '0').Contains(correctDigits[i]))
+			    yield return true;
+
+		    Buttons[(int)correctButtonPositions[i]].OnInteract();
+		    yield return new WaitForSeconds(0.1f);
+		    Buttons[(int)correctButtonPositions[i]].OnInteractEnded();
+		    yield return new WaitForSeconds(0.1f);
+	    }
     }
 
 
