@@ -39,7 +39,7 @@ public class ButtonpadGenerator
         Circle, Omega, QuestionMark, Pumpkin, SpeechBubble, Pitchfork, BT, HookN,
         NWithHat, HollowStar, Six, Dragon, WeirdBike, AE, SquidKnife, Copyright,
         Dragon, Euro, HollowStar, Tracks, Tripod, DoubleK, Clover, MeltedThree,
-        QuestionMark, SmileyFace, MeltedThree, Balloon, HollowStar, LeftC, RightC, SquigglyN,
+        QuestionMark, SmileyFace, MeltedThree, Balloon, HollowStar, LeftC, RightC, SquigglyN, 
         Paragraph, NWithHat, Pumpkin, Tripod, Circle, UpsideDownY, AT, AE,
         RightC, Cursive, FilledStar, HookN, UpsideDownY, WeirdBike, Pitchfork, QuestionMark,
         Pitchfork, AT, Copyright, DoubleK, Crucible, Tracks, HookN, LeftC,
@@ -56,8 +56,6 @@ public class ButtonpadGenerator
         Crucible, FilledStar, Paragraph, WeirdNose, AT, SquidKnife, UpsideDownY, RightC,
         SpeechBubble, Copyright, Cursive, NWithHat, Six, QuestionMark, SquigglyN, Pumpkin
     };
-    
-    //ROYGBPW
 
     private static readonly LEDColor[] _ledColorTable = new[]
     {
@@ -73,12 +71,12 @@ public class ButtonpadGenerator
         "PPPGGWBO",
         "YBRWWGWR",
         "RPGOGWBO",
-        "YBYOYOGW",
+        "BYBOYOGW",
         "WWOWBYOR",
         "RBGRORPY",
         "GRYBPWRB",
         "WWWOPOYB",
-        "PGPGRPPW",
+        "PGPGRGGW",
         "YWWWYPGP",
         "GYRPPBRB",
         "POBGBBBP",
@@ -93,7 +91,7 @@ public class ButtonpadGenerator
         "OGBYGYPG",
         "GBOOBGRP",
         "RWPPWORO",
-        "GRBYOYWB",
+        "GOBYOYWB",
         "ORYWPGOG",
         "WBPRROWY"
     }.SelectMany(x => x.Select(y => (LEDColor)"ROYGBPW".IndexOf(y))).ToArray();
