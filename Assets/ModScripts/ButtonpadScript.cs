@@ -212,6 +212,7 @@ public class ButtonpadScript : MonoBehaviour
 
 				foreach (var index in pressedButtons)
 				{
+					Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.BigButtonRelease, Buttons[index].transform);
 					_buttonAnims[index] = StartCoroutine(ButtonAnimation((ButtonPosition)index, false));
 					LEDMeshes[index].material = LEDMats[0];
 				}
@@ -241,7 +242,7 @@ public class ButtonpadScript : MonoBehaviour
 			
 			if (_lastButtonLit == null && !_generator.GetFirstButtonToHold().Contains(_buttonSet[(int)ix]))
 				areWrong.Add($"expected to hold either {_generator.GetFirstButtonToHold().Select((x, i) => i == _generator.GetFirstButtonToHold().Count() - 1 ? $"or {_generator.GetExpectedPositionFromButton(x)}" : _generator.GetExpectedPositionFromButton(x).ToString()).Join(", ")}");
-			else if (_buttonSet[(int)ix] != _lastButtonLit)
+			else if (_lastButtonLit != null && _buttonSet[(int)ix] != _lastButtonLit)
 				areWrong.Add($"expected to hold {_generator.GetExpectedPositionFromButton(_lastButtonLit.Value)}");
 			
 			if (!timer.Contains(ButtonpadGenerator.CalculateDigitalRoot(_ledSet[(int)ix])))
