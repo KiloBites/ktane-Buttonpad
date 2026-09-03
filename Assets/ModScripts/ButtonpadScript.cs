@@ -480,8 +480,6 @@ public class ButtonpadScript : MonoBehaviour
 	    var correctButtonPositions = Enumerable.Range(0, 4).Select(_generator.GetExpectedPosition).ToArray();
 	    var correctDigits = correctButtonPositions.Select(x => _generator.GetDigitForSubmission(_buttonSet[(int)x])).ToArray();
 
-	    yield return null;
-
 	    for (int i = 0; i < 4; i++)
 	    {
 		    if (_submittedButtons.Contains(_buttonSet[(int)correctButtonPositions[i]]))
