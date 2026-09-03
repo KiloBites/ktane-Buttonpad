@@ -404,10 +404,14 @@ public class ButtonpadScript : MonoBehaviour
 				
 				yield break;
 			case "TAP":
-				if (split.Length == 1)
+				switch (split.Length)
 				{
-					yield return "sendtochaterror Please specify what button to tap!";
-					yield break;
+					case 1:
+						yield return "sendtochaterror Please specify what button to tap!";
+						yield break;
+					case 2:
+						yield return "sendtochaterror Please specify when to tap the button!";
+						yield break;
 				}
 
 				if (split.Length > 3)

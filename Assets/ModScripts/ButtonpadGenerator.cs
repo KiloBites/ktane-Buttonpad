@@ -250,7 +250,7 @@ public class ButtonpadGenerator
                 break;
         }
 
-        return $"Rule {appliedRule + 1} applies: {rule}. The first correct button(s) to hold are: {firstButtonPositions.Join(", ")}";
+        return $"Rule {appliedRule + 1} applies: {rule}. The first correct button(s) to hold is/are: {firstButtonPositions.Join(", ")}";
     }
 
     public IEnumerable<ButtonInfo> GetFirstButtonToHold()
