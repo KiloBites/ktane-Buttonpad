@@ -71,7 +71,7 @@ public class ButtonpadScript : MonoBehaviour
 			_buttonAnims[(int)ix] = null;
 		}
 		
-		if (_moduleSolved || _inSubmission || _submittedButtons.Contains(_buttonSet[(int)ix]))
+		if (_moduleSolved || _submittedButtons.Contains(_buttonSet[(int)ix]))
 			return;
 		
 		_buttonAnims[(int)ix] = StartCoroutine(ButtonAnimation(ix, true));
@@ -182,6 +182,8 @@ public class ButtonpadScript : MonoBehaviour
 			_holding = null;
 
 			_isBeingHeld[(int)ix] = false;
+			
+			_buttonAnims[(int)ix] = StartCoroutine(ButtonAnimation(ix, false));
 
 			LEDMeshes[(int)_ledSet[(int)ix].Position].material = LEDMats[0];
 			CBLEDTexts[(int)_ledSet[(int)ix].Position].text = string.Empty;
@@ -236,6 +238,9 @@ public class ButtonpadScript : MonoBehaviour
 			StopCoroutine(_holding);
 			_holding = null;
 			_isBeingHeld[(int)ix] = false;
+			
+			Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.BigButtonRelease, button.transform);
+			_buttonAnims[(int)ix] = StartCoroutine(ButtonAnimation(ix, false));
 			
 			LEDMeshes[(int)_ledSet[(int)ix].Position].material = LEDMats[0];
 			CBLEDTexts[(int)_ledSet[(int)ix].Position].text = string.Empty;

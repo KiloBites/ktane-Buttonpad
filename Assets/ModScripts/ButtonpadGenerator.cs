@@ -225,7 +225,7 @@ public class ButtonpadGenerator
                 rule = "Exactly three buttons are the same color";
                 break;
             case 2:
-                rule = "There are two or more batteries on the bomb, and one of the buttons has a crucible symbol on it";
+                rule = "There is a white button, and one of the buttons has a crucible symbol on it";
                 break;
             case 3:
                 rule = "There is a serial port and a BOB indicator present on the bomb";
@@ -234,13 +234,13 @@ public class ButtonpadGenerator
                 rule = "There is a button with the Six or Copyright symbol on it";
                 break;
             case 5:
-                rule = "None of the buttons contained the Question Mark symbol, and an unlit NSA indicator is present on the bomb";
+                rule = "None of the buttons contained the Question Mark symbol and there are no yellow buttons";
                 break;
             case 6:
                 rule = "Exactly one button has either the Weird Bike, Hook N, or Clover symbol on it";
                 break;
             case 7:
-                rule = "All but one button has either the Squidknife, Pumpkin, Smiley Face, or the Euro symbol on it";
+                rule = "Exactly one or three buttons have either the Squidknife, Pumpkin, Smiley Face, or the Euro symbol on it";
                 break;
             case 8:
                 rule = "None of the symbols in the above rules appeared on any of the buttons";
@@ -311,6 +311,8 @@ public class ButtonpadGenerator
         var rule7Symbols = new[] { WeirdBike, HookN, Clover };
         var rule8Symbols = new[] { SquidKnife, Pumpkin, SmileyFace, Euro };
 
+        var rule8Numbers = new[] { 1, 3 };
+
         switch (index)
         {
             case 0:
@@ -318,17 +320,17 @@ public class ButtonpadGenerator
             case 1:
                 return _buttons.Select(x => x.ButtonColor).GroupBy(x => x).Any(x => x.Count() == 3);
             case 2:
-                return _bomb.GetBatteryCount() >= 2 && _buttons.Any(x => x.ButtonSymbol == Crucible);
+                return _buttons.Any(x => x.ButtonColor == White) && _buttons.Any(x => x.ButtonSymbol == Crucible);
             case 3:
                 return _bomb.IsPortPresent(Port.Serial) && _bomb.IsIndicatorPresent(Indicator.BOB);
             case 4:
                 return _buttons.Select(x => x.ButtonSymbol).Any(rule5Symbols.Contains);
             case 5:
-                return _buttons.All(x => x.ButtonSymbol != QuestionMark) && _bomb.IsIndicatorOff(Indicator.NSA);
+                return _buttons.All(x => x.ButtonSymbol != QuestionMark && x.ButtonColor != Yellow);
             case 6:
                 return _buttons.Select(x => x.ButtonSymbol).Count(rule7Symbols.Contains) == 1;
             case 7:
-                return _buttons.Select(x => x.ButtonSymbol).Count(rule8Symbols.Contains) == 3;
+                return rule8Numbers.Contains(_buttons.Select(x => x.ButtonSymbol).Count(rule8Symbols.Contains));
             case 8:
                 var checkAllSymbols = new[] { RightC, Crucible }.Concat(rule5Symbols).Concat(rule7Symbols).Concat(rule8Symbols).ToList();
                 return _buttons.Select(x => x.ButtonSymbol).All(x => !checkAllSymbols.Contains(x));
