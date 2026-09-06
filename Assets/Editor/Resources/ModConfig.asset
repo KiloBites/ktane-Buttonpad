@@ -22,5 +22,5 @@ MonoBehaviour:
     the four buttons in the correct order using the provided LEDs.'
   version: 1
   outputFolder: build
-  debugBuild: 1
-  previewImage: {fileID: 0}
+  debugBuild: 0
+  previewImage: {fileID: 2800000, guid: 0ddcb70293dcb43a3a9e26899c1db7b5, type: 3}
