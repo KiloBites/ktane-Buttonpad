@@ -124,7 +124,7 @@ public class ButtonpadScript : MonoBehaviour
 		LEDMeshes[(int)_ledSet[(int)pos].Position].material = LEDMats[1];
 
 		CBLEDTexts[(int)_ledSet[(int)pos].Position].text = _cbActive && _ledSet[(int)pos].LEDColor != LEDColor.White ? _ledSet[(int)pos].LEDColor.ToString() : string.Empty;
-		CBLEDTexts[(int)_ledSet[(int)pos].Position].color = _ledSet[(int)pos].Button.ButtonColor == ButtonColor.Yellow ? Color.black : Color.white;
+		CBLEDTexts[(int)_ledSet[(int)pos].Position].color = _buttonSet[(int)_ledSet[(int)pos].Position].ButtonColor == ButtonColor.Yellow ? Color.black : Color.white;
 
 		var color = _ledSet[(int)pos].GetLEDColor();
 		var darkerColor = color.GetDarkerShade();
