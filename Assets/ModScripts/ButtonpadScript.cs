@@ -362,6 +362,12 @@ public class ButtonpadScript : MonoBehaviour
 
 				yield break;
 			case "RELEASE":
+				if (_isBeingHeld.All(x => !x))
+				{
+					yield return "sendtochaterror There is no button to release!";
+					yield break;
+				}
+				
 				if (_inSubmission)
 				{
 					yield return "sendtochaterror The module is in submission mode!";
@@ -380,11 +386,6 @@ public class ButtonpadScript : MonoBehaviour
 					yield break;
 				}
 
-				if (_isBeingHeld.All(x => !x))
-				{
-					yield return "sendtochaterror There is no button to release!";
-					yield break;
-				}
 
 				int releaseDigit;
 
@@ -404,6 +405,12 @@ public class ButtonpadScript : MonoBehaviour
 				
 				yield break;
 			case "TAP":
+				if (_isBeingHeld.Any(x => x))
+				{
+					yield return "sendtochaterror You cannot tap a button while the current button is being held!";
+					yield break;
+				}
+				
 				switch (split.Length)
 				{
 					case 1:
@@ -434,9 +441,17 @@ public class ButtonpadScript : MonoBehaviour
 					yield break;
 				}
 				
+				
+				var index = Array.IndexOf(buttonPositions, split[1]);
+
+				if (_submittedButtons.Contains(_buttonSet[index]))
+				{
+					yield return "sendtochaterror The button is already submitted!";
+					yield break;
+				}
+				
 				yield return null;
 
-				var index = Array.IndexOf(buttonPositions, split[1]);
 				
 				while (!Bomb.GetFormattedTime().Where(char.IsDigit).Select(x => x - '0').Contains(tapDigit))
 					yield return "trycancel Button tap command has been canceled!";

@@ -19,7 +19,10 @@ MonoBehaviour:
 
 
     Hold and release four buttons based on their strange labels and colors, then tap
-    the four buttons in the correct order using the provided LEDs.'
+    the four buttons in the correct order using the provided LEDs.
+
+
+    Manual by Sameone'
   version: 1
   outputFolder: build
   debugBuild: 0
