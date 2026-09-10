@@ -246,7 +246,7 @@ public class ButtonpadScript : MonoBehaviour
 			CBLEDTexts[(int)_ledSet[(int)ix].Position].text = string.Empty;
 			
 			if (_lastButtonLit == null && !_generator.GetFirstButtonToHold().Contains(_buttonSet[(int)ix]))
-				areWrong.Add($"expected to hold either {_generator.GetFirstButtonToHold().Select((x, i) => i == _generator.GetFirstButtonToHold().Count() - 1 ? $"or {_generator.GetExpectedPositionFromButton(x)}" : _generator.GetExpectedPositionFromButton(x).ToString()).Join(", ")}");
+				areWrong.Add($"expected to hold {_generator.GetFirstButtonToHold().Select((x, i) => i == _generator.GetFirstButtonToHold().Count() - 1 && _generator.GetFirstButtonToHold().Count() != 1 ? $"or {_generator.GetExpectedPositionFromButton(x)}" : _generator.GetExpectedPositionFromButton(x).ToString()).Join(", ")}");
 			else if (_lastButtonLit != null && _buttonSet[(int)ix] != _lastButtonLit)
 				areWrong.Add($"expected to hold {_generator.GetExpectedPositionFromButton(_lastButtonLit.Value)}");
 			
