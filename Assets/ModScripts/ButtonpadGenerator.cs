@@ -76,7 +76,7 @@ public class ButtonpadGenerator
         "RBGRORPY",
         "GRYBPWRB",
         "WWWOPOYB",
-        "PGPGRGGW",
+        "PGPGRPPW",
         "YWWWYPGP",
         "GYRPPBRB",
         "POBGBBBP",
